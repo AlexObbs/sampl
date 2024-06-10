@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Example Map with Signpost marker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+        }
+
+        .numbered-icon .signpost {
+            background-color: orange;
+            border: 2px solid black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .numbered-icon .signpost:before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 10px 5px 0;
+            border-style: solid;
+            border-color: black transparent transparent;
+            display: block;
+            width: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        var locations = [
+            { lat: 40.7128, lon: -74.0060, label: 'New York', article: 'New_York_City' },
+            { lat: 51.5074, lon: -0.1278, label: 'London', article: 'London' },
+            { lat: -6.8182, lon: 8.2275, label: 'Switzerland', article: 'Switzerland' }
+        ];
+
+        locations.forEach(function (location) {
+            var icon = L.divIcon({
+                className: 'numbered-icon',
+                html: '<div class="signpost">' + location.label + '</div>',
+                iconSize: [90, 30],
+                iconAnchor: [40, 35]
+            });
+
+            var marker = L.marker([location.lat, location.lon], { icon: icon }).addTo(map);
+            marker.bindPopup('<strong>' + location.label + '</strong><br><a href="https://en.wikipedia.org/wiki/' + location.article + '" target="_blank">Read more</a>');
+        });
+    </script>
+</body>
+
+</html>
